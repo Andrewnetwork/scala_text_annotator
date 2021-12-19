@@ -1,0 +1,8 @@
+compile
+run
+cls
+run
+fastLinkJS
+reload
+fastLinkJS
+~fastLinkJS
