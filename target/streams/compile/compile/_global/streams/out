@@ -1,0 +1,4 @@
+[0m[[0m[31merror[0m] [0m[0mC:\Users\Andre\Documents\GitHub\scala_text_annotator\src\main\scala\tutorial\webapp\TutorialApp.scala:17:77: value - is not a member of String[0m
+[0m[[0m[31merror[0m] [0m[0m          "width:200px; position: absolute; left: "+dom.window.innerWidth/2 - 100+"px;top:"+(loc._2+30)+"px;")[0m
+[0m[[0m[31merror[0m] [0m[0m                                                                            ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
