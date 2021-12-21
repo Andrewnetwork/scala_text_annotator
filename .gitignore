@@ -1,3 +1,6 @@
 *.class
 *.log
 .metals/
+.bloop/
+.vscode/
+target/

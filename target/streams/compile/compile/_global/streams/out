@@ -1,4 +1,0 @@
-[0m[[0m[31merror[0m] [0m[0mC:\Users\Andre\OneDrive\Documents\GitHub\scala_text_annotator\src\main\scala\tutorial\webapp\TutorialApp.scala:12:41: forward reference extends over definition of value loc[0m
-[0m[[0m[31merror[0m] [0m[0m        val loc: (Double, Double) = if (loc._2 > pointer_down_loc._2) loc else pointer_down_loc[0m
-[0m[[0m[31merror[0m] [0m[0m                                        ^[0m
-[0m[[0m[31merror[0m] [0m[0mone error found[0m
