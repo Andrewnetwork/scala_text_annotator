@@ -2326,10 +2326,12 @@ function $c_Ltutorial_webapp_TutorialApp$() {
   this.Ltutorial_webapp_TutorialApp$__f_pointer_down_loc = null;
   this.Ltutorial_webapp_TutorialApp$__f_menu = null;
   this.Ltutorial_webapp_TutorialApp$__f_mouse_loc = null;
+  this.Ltutorial_webapp_TutorialApp$__f_isSelecting = false;
   $n_Ltutorial_webapp_TutorialApp$ = this;
   this.Ltutorial_webapp_TutorialApp$__f_pointer_down_loc = new $c_T2$mcDD$sp(0.0, 0.0);
   this.Ltutorial_webapp_TutorialApp$__f_menu = $m_s_None$();
-  this.Ltutorial_webapp_TutorialApp$__f_mouse_loc = new $c_T2$mcDD$sp(0.0, 0.0)
+  this.Ltutorial_webapp_TutorialApp$__f_mouse_loc = new $c_T2$mcDD$sp(0.0, 0.0);
+  this.Ltutorial_webapp_TutorialApp$__f_isSelecting = false
 }
 $c_Ltutorial_webapp_TutorialApp$.prototype = new $h_O();
 $c_Ltutorial_webapp_TutorialApp$.prototype.constructor = $c_Ltutorial_webapp_TutorialApp$;
@@ -2338,9 +2340,9 @@ function $h_Ltutorial_webapp_TutorialApp$() {
   /*<skip>*/
 }
 $h_Ltutorial_webapp_TutorialApp$.prototype = $c_Ltutorial_webapp_TutorialApp$.prototype;
-$c_Ltutorial_webapp_TutorialApp$.prototype.createMenu__T2__Lorg_scalajs_dom_raw_Element = (function(pointer_up_loc) {
+$c_Ltutorial_webapp_TutorialApp$.prototype.createMenu__T2__Lorg_scalajs_dom_raw_Element = (function(upper_left) {
   var menuDiv = $m_Lorg_scalajs_dom_package$().document__Lorg_scalajs_dom_raw_HTMLDocument().createElement("div");
-  var loc = ((pointer_up_loc._2$mcD$sp__D() > this.Ltutorial_webapp_TutorialApp$__f_pointer_down_loc._2$mcD$sp__D()) ? pointer_up_loc : this.Ltutorial_webapp_TutorialApp$__f_pointer_down_loc);
+  var loc = ((upper_left._2$mcD$sp__D() > this.Ltutorial_webapp_TutorialApp$__f_pointer_down_loc._2$mcD$sp__D()) ? upper_left : this.Ltutorial_webapp_TutorialApp$__f_pointer_down_loc);
   menuDiv.setAttribute("style", (((("background-color: red; height:200px;width:200px; position: absolute; left: " + (($uD($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().innerWidth) / 2.0) - 100.0)) + "px;top:") + (loc._2$mcD$sp__D() + 40.0)) + "px;"));
   return menuDiv
 });
@@ -2358,16 +2360,24 @@ $c_Ltutorial_webapp_TutorialApp$.prototype.updateMenuLoc__V = (function() {
   }
 });
 $c_Ltutorial_webapp_TutorialApp$.prototype.main__AT__V = (function(args) {
-  $m_Lorg_scalajs_dom_package$().document__Lorg_scalajs_dom_raw_HTMLDocument().addEventListener("mousemove", ((arg1$2) => {
-    $m_Ltutorial_webapp_TutorialApp$().tutorial$webapp$TutorialApp$$$anonfun$main$1__Lorg_scalajs_dom_raw_MouseEvent__V(arg1$2)
-  }));
-  $m_Lorg_scalajs_dom_package$().document__Lorg_scalajs_dom_raw_HTMLDocument().addEventListener("selectstart", ((arg1$2$1) => $m_Ltutorial_webapp_TutorialApp$().tutorial$webapp$TutorialApp$$$anonfun$main$3__Lorg_scalajs_dom_raw_Event__Lorg_scalajs_dom_raw_Node(arg1$2$1)))
+  $m_Lorg_scalajs_dom_package$().document__Lorg_scalajs_dom_raw_HTMLDocument().addEventListener("mousemove", ((arg1$2) => $m_Ltutorial_webapp_TutorialApp$().tutorial$webapp$TutorialApp$$$anonfun$main$1__Lorg_scalajs_dom_raw_MouseEvent__O(arg1$2)));
+  $m_Lorg_scalajs_dom_package$().document__Lorg_scalajs_dom_raw_HTMLDocument().addEventListener("selectstart", ((arg1$2$1) => $m_Ltutorial_webapp_TutorialApp$().tutorial$webapp$TutorialApp$$$anonfun$main$3__Lorg_scalajs_dom_raw_Event__Lorg_scalajs_dom_raw_Node(arg1$2$1)));
+  $m_Lorg_scalajs_dom_package$().document__Lorg_scalajs_dom_raw_HTMLDocument().addEventListener("pointerup", ((arg1$2$2) => {
+    $m_Ltutorial_webapp_TutorialApp$();
+    $m_Ltutorial_webapp_TutorialApp$().Ltutorial_webapp_TutorialApp$__f_isSelecting = false
+  }))
 });
-$c_Ltutorial_webapp_TutorialApp$.prototype.tutorial$webapp$TutorialApp$$$anonfun$main$1__Lorg_scalajs_dom_raw_MouseEvent__V = (function(e) {
-  $m_Ltutorial_webapp_TutorialApp$().Ltutorial_webapp_TutorialApp$__f_mouse_loc = new $c_T2$mcDD$sp($uD(e.clientX), $uD(e.clientY));
-  $m_Ltutorial_webapp_TutorialApp$().updateMenuLoc__V()
+$c_Ltutorial_webapp_TutorialApp$.prototype.tutorial$webapp$TutorialApp$$$anonfun$main$1__Lorg_scalajs_dom_raw_MouseEvent__O = (function(e) {
+  if ($m_Ltutorial_webapp_TutorialApp$().Ltutorial_webapp_TutorialApp$__f_isSelecting) {
+    $m_Ltutorial_webapp_TutorialApp$().Ltutorial_webapp_TutorialApp$__f_mouse_loc = new $c_T2$mcDD$sp($uD(e.clientX), $uD(e.clientY));
+    $m_Ltutorial_webapp_TutorialApp$().updateMenuLoc__V();
+    return (void 0)
+  } else {
+    return (void 0)
+  }
 });
 $c_Ltutorial_webapp_TutorialApp$.prototype.tutorial$webapp$TutorialApp$$$anonfun$main$3__Lorg_scalajs_dom_raw_Event__Lorg_scalajs_dom_raw_Node = (function(x) {
+  $m_Ltutorial_webapp_TutorialApp$().Ltutorial_webapp_TutorialApp$__f_isSelecting = true;
   $m_Ltutorial_webapp_TutorialApp$().Ltutorial_webapp_TutorialApp$__f_menu = new $c_s_Some($m_Ltutorial_webapp_TutorialApp$().createMenu__T2__Lorg_scalajs_dom_raw_Element($m_Ltutorial_webapp_TutorialApp$().Ltutorial_webapp_TutorialApp$__f_mouse_loc));
   return $m_Lorg_scalajs_dom_package$().document__Lorg_scalajs_dom_raw_HTMLDocument().body.appendChild($m_Ltutorial_webapp_TutorialApp$().Ltutorial_webapp_TutorialApp$__f_menu.get__O())
 });

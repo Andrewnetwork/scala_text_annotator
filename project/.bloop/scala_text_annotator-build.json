@@ -2,14 +2,14 @@
     "version": "1.4.0",
     "project": {
         "name": "scala_text_annotator-build",
-        "directory": "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project",
-        "workspaceDir": "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project",
+        "directory": "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project",
+        "workspaceDir": "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project",
         "sources": [
-            "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\scala-2.12",
-            "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\scala",
-            "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\java",
-            "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\scala-sbt-1.0",
-            "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\target\\scala-2.12\\sbt-1.0\\src_managed\\main"
+            "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\scala-2.12",
+            "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\scala",
+            "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\java",
+            "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\scala-sbt-1.0",
+            "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\target\\scala-2.12\\sbt-1.0\\src_managed\\main"
         ],
         "dependencies": [
             
@@ -112,11 +112,11 @@
             "C:\\Users\\Andre\\AppData\\Local\\Coursier\\cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\librarymanagement-ivy_2.12\\1.3.1\\librarymanagement-ivy_2.12-1.3.1.jar",
             "C:\\Users\\Andre\\AppData\\Local\\Coursier\\cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\test-agent\\1.3.7\\test-agent-1.3.7.jar"
         ],
-        "out": "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\.bloop\\scala_text_annotator-build",
-        "classesDir": "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\.bloop\\scala_text_annotator-build\\scala-2.12\\sbt-1.0\\classes",
+        "out": "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\.bloop\\scala_text_annotator-build",
+        "classesDir": "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\.bloop\\scala_text_annotator-build\\scala-2.12\\sbt-1.0\\classes",
         "resources": [
-            "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\resources",
-            "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\target\\scala-2.12\\sbt-1.0\\resource_managed\\main"
+            "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\src\\main\\resources",
+            "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\target\\scala-2.12\\sbt-1.0\\resource_managed\\main"
         ],
         "scala": {
             "organization": "org.scala-lang",
@@ -133,7 +133,7 @@
                 "C:\\Users\\Andre\\.sbt\\boot\\scala-2.12.10\\lib\\scala-reflect.jar",
                 "C:\\Users\\Andre\\.sbt\\boot\\scala-2.12.10\\lib\\scala-xml_2.12.jar"
             ],
-            "analysis": "C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project\\target\\streams\\compile\\bloopAnalysisOut\\_global\\streams\\inc_compile_2.12.zip",
+            "analysis": "C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project\\target\\streams\\compile\\bloopAnalysisOut\\_global\\streams\\inc_compile_2.12.zip",
             "setup": {
                 "order": "mixed",
                 "addLibraryToBootClasspath": true,
@@ -201,9 +201,9 @@
         "platform": {
             "name": "jvm",
             "config": {
-                "home": "C:\\Program Files\\Java\\jdk-12.0.2",
+                "home": "C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.13.8-hotspot",
                 "options": [
-                    "-Duser.dir=C:\\Users\\Andre\\Documents\\GitHub\\scala_text_annotator\\project"
+                    "-Duser.dir=C:\\Users\\Andre\\OneDrive\\Documents\\GitHub\\scala_text_annotator\\project"
                 ]
             },
             "mainClass": [
