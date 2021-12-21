@@ -4,3 +4,7 @@
 .bloop/
 .vscode/
 target/
+project/project/
+project/.bloop/
+project/target/
+project/metals.sbt
