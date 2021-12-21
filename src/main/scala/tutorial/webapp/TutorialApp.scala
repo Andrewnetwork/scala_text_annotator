@@ -11,7 +11,7 @@ object TutorialApp {
     var currentSelection = "" 
 
     def onSelectionChange(eventListener: String => Unit){
-        setInterval(200) {
+        setInterval(100) {
             val updatedSelection = dom.window.getSelection().toString()
             if (updatedSelection != currentSelection){
                 eventListener(updatedSelection)
@@ -26,9 +26,9 @@ object TutorialApp {
         menuDiv.innerHTML = "MENU"
         menuDiv.setAttribute("style", "background-color: red; height:200px;" +
           "width:200px; position: absolute; left: "+(dom.window.innerWidth/2 - 100)+"px;top:"+(loc._2+40)+"px;")
-
         menu = Some(menuDiv)
         document.body.appendChild(menu.get)
+        isSelecting = true
     }
     def deleteMenu(): Unit = {
         menu match {
@@ -40,23 +40,28 @@ object TutorialApp {
         }
     }
     def updateMenuLoc(): Unit = {
-        menu match{
-            case Some(menu_inner) => menu_inner.setAttribute("style", "background-color: red; height:200px;" +
-                    "width:200px; position: absolute; left: "+(dom.window.innerWidth/2 - 100)+"px;top:"+
-                        (mouse_loc._2+40+dom.window.pageYOffset)+"px;");
-            case None => ()
+        if (isSelecting){
+            menu match{
+                case Some(menu_inner) => {
+                    val yPos = if (mouse_loc._2 > pointer_down_loc._2){
+                        (mouse_loc._2+40+dom.window.pageYOffset)
+                    }else (mouse_loc._2-240+dom.window.pageYOffset)
+                    menu_inner.setAttribute("style", "background-color: red; height:200px;" +
+                        "width:200px; position: absolute; left: "+(dom.window.innerWidth/2 - 100)+"px;top:"+
+                            yPos+"px;");
+                }   
+                case None => ()
+            }
         }
     }
    
     def main(args: Array[String]): Unit = {
         document.addEventListener("mousemove", {(e: dom.MouseEvent) => 
             mouse_loc = (e.clientX, e.clientY)
-            if (isSelecting){
-                updateMenuLoc
-            }
         })
         document.addEventListener("pointerdown", {(e: dom.MouseEvent) =>
             deleteMenu()
+            pointer_down_loc = (e.clientX, e.clientY)
         })
         document.addEventListener("pointerup", {(e: dom.MouseEvent) =>
             isSelecting = false
@@ -64,11 +69,11 @@ object TutorialApp {
         onSelectionChange({(selection: String) => 
             if(selection.length()>0 && menu == None){
                 createMenu()
-                isSelecting = true
             } 
             if(selection.length()==0 && menu != None){
                 deleteMenu()
             }
+            updateMenuLoc
         })
     }
 }
