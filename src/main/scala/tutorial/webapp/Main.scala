@@ -5,8 +5,8 @@ import scala.scalajs.js.timers.setInterval
 
 object Main {
     var state = new GlobalState()
-
-    var selectionMenu = new SelectionMenu(state)
+    var selectionMenu = new TagMenu(state)
+    selectionMenu.addTag("Name", "#348ceb")
 
     val pollingFn = (state: GlobalState) => {
         val updatedSelection = dom.window.getSelection().toString()
@@ -26,13 +26,13 @@ object Main {
     }
     val pollingEvent = new PollingEvent(state, pollingFn, eventListener)
 
-    def main(args: Array[String]): Unit = {
-        document.addEventListener("mousemove", {(e: dom.MouseEvent) => 
-            state.mouse_loc = (e.pageX, e.pageY)
-        })
-        document.addEventListener("pointerdown", {(e: dom.MouseEvent) =>
-            state.pointer_down_loc = (e.pageX, e.pageY)
-        })
-    }
+    document.addEventListener("mousemove", {(e: dom.MouseEvent) =>
+        state.mouse_loc = (e.clientX, e.clientY)
+    })
+    document.addEventListener("pointerdown", {(e: dom.MouseEvent) =>
+        state.pointer_down_loc = (e.pageX, e.pageY)
+    })
+
+    def main(args: Array[String]): Unit = {}
 }
 

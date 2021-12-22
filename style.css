@@ -1,0 +1,21 @@
+#menu{
+    display:inline-flex;
+    flex-wrap: wrap; 
+    border-radius: 25px;
+    background: #83c0e6;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+#menu > div{
+    display: flex;
+    margin:5px;
+}
+.tagCheckBox{
+    padding:5px;
+}
+.tagNameDiv{
+    line-height:30px; 
+    margin-left:5px;
+}
