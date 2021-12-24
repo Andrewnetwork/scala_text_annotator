@@ -10,7 +10,7 @@ class TagMenu(gState: GlobalState) {
     val menuContextMargin = 40
     var menuHeight = 0.0
     var selectingUp = true
-    var tags = List[(String,String, dom.Element)]()
+    var tags = List[(String,String, dom.Element, dom.html.Input)]()
 
     val loc: (Double, Double) = if (state.mouse_loc._2 > state.pointer_down_loc._2) state.mouse_loc else state.pointer_down_loc
     menuDiv.setAttribute("id", "menu")
@@ -18,29 +18,30 @@ class TagMenu(gState: GlobalState) {
         "px;top:"+(loc._2+40)+"px;")
     updateSize()
 
-    val tagApply: Function1[dom.Event, Unit] = (e0: dom.Event) => {
-        val selection = dom.window.getSelection()
-        val anchorNode = selection.anchorNode
-        val anchorNodeParent = anchorNode.parentNode.asInstanceOf[dom.Element]
-        val text = anchorNodeParent.innerHTML
-        // Needed to get the proper offset value. 
-        var child = anchorNode.previousSibling
-        var lengthBeforeSelection = 0
-        while(anchorNode.firstChild != child && !js.isUndefined(child)){
-            if(child.toString() == "[object Text]"){
-                lengthBeforeSelection += child.asInstanceOf[dom.Text].length
-            }else{
-                lengthBeforeSelection += child.asInstanceOf[dom.Element].outerHTML.length()
-            } 
-            child = child.previousSibling
-        }
-        // Splitting the HTML and inserting the tag.
-        val fstSpit = if(selection.anchorOffset <= selection.focusOffset) selection.anchorOffset+lengthBeforeSelection else 
-                selection.anchorOffset+lengthBeforeSelection-state.currentSelection.length()
-        val (fst, snd) = text.splitAt(fstSpit)
-        val (trd, fth) = snd.splitAt(state.currentSelection.length())
-        anchorNodeParent.innerHTML = fst+"<b>"+trd+"</b>"+fth
-    }
+    def makeTagCallback(color: String): Function1[dom.Event, Unit] = {
+        (e0: dom.Event) => {
+            val selection = dom.window.getSelection()
+            val anchorNode = selection.anchorNode
+            val anchorNodeParent = anchorNode.parentNode.asInstanceOf[dom.Element]
+            val text = anchorNodeParent.innerHTML
+            // Needed to get the proper offset value. 
+            var child = anchorNode.previousSibling
+            var lengthBeforeSelection = 0
+            while(anchorNode.firstChild != child && !js.isUndefined(child)){
+                if(child.toString() == "[object Text]"){
+                    lengthBeforeSelection += child.asInstanceOf[dom.Text].length
+                }else{
+                    lengthBeforeSelection += child.asInstanceOf[dom.Element].outerHTML.length()
+                } 
+                child = child.previousSibling
+            }
+            // Splitting the HTML and inserting the tag.
+            val fstSpit = if(selection.anchorOffset <= selection.focusOffset) selection.anchorOffset+lengthBeforeSelection else 
+                    selection.anchorOffset+lengthBeforeSelection-state.currentSelection.length()
+            val (fst, snd) = text.splitAt(fstSpit)
+            val (trd, fth) = snd.splitAt(state.currentSelection.length())
+            anchorNodeParent.innerHTML = fst+"<span style='background-color:"+color+"'>"+trd+"</span>"+fth
+    }}
     def hideMenu(): Unit = {
         document.body.removeChild(menuDiv)
         isVisible = false
@@ -51,6 +52,10 @@ class TagMenu(gState: GlobalState) {
     def displayMenu(): Unit = {
         document.body.appendChild(menuDiv)
         isVisible = true
+    
+        tags.foreach( (tag) =>{
+            tag._4.checked = false
+        })
     }
     def updateMenuLoc(): Unit = {
         // Determines if the user is selecting up or down and returns a y-coordinate accordingly.
@@ -76,9 +81,9 @@ class TagMenu(gState: GlobalState) {
     def addTag(name: String, color: String): Unit = {
         val tagDiv = document.createElement("div")
         
-        val checkBox = document.createElement("input")
+        val checkBox = document.createElement("input").asInstanceOf[dom.html.Input]
         checkBox.setAttribute("type", "checkbox")
-        checkBox.addEventListener("click", tagApply)
+        checkBox.addEventListener("click", makeTagCallback(color))
 
         val checkBoxDiv = document.createElement("div")
         checkBoxDiv.setAttribute("class", "tagCheckBox")
@@ -92,7 +97,7 @@ class TagMenu(gState: GlobalState) {
         tagDiv.appendChild(checkBoxDiv)
         tagDiv.appendChild(nameDiv)
         menuDiv.appendChild(tagDiv)
-        tags :+ (name,color,tagDiv)
+        tags = (name,color,tagDiv,checkBox) :: tags
         updateSize()
     }
 }
