@@ -35,8 +35,8 @@ class TagMenu(gState: GlobalState) {
             child = child.previousSibling
         }
         // Splitting the HTML and inserting the tag.
-        val fstSpit = if(selectingUp) selection.anchorOffset+lengthBeforeSelection else
-            selection.anchorOffset+lengthBeforeSelection-state.currentSelection.length()
+        val fstSpit = if(selection.anchorOffset <= selection.focusOffset) selection.anchorOffset+lengthBeforeSelection else 
+                selection.anchorOffset+lengthBeforeSelection-state.currentSelection.length()
         val (fst, snd) = text.splitAt(fstSpit)
         val (trd, fth) = snd.splitAt(state.currentSelection.length())
         anchorNodeParent.innerHTML = fst+"<b>"+trd+"</b>"+fth
