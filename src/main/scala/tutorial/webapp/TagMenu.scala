@@ -1,6 +1,7 @@
 package tutorial.webapp
 import org.scalajs.dom
 import org.scalajs.dom.document
+import scala.scalajs.js
 
 class TagMenu(gState: GlobalState) {
     val state = gState
@@ -8,6 +9,7 @@ class TagMenu(gState: GlobalState) {
     var isVisible = false
     val menuContextMargin = 40
     var menuHeight = 0.0
+    var selectingUp = true
     var tags = List[(String,String, dom.Element)]()
 
     val loc: (Double, Double) = if (state.mouse_loc._2 > state.pointer_down_loc._2) state.mouse_loc else state.pointer_down_loc
@@ -16,6 +18,29 @@ class TagMenu(gState: GlobalState) {
         "px;top:"+(loc._2+40)+"px;")
     updateSize()
 
+    val tagApply: Function1[dom.Event, Unit] = (e0: dom.Event) => {
+        val selection = dom.window.getSelection()
+        val anchorNode = selection.anchorNode
+        val anchorNodeParent = anchorNode.parentNode.asInstanceOf[dom.Element]
+        val text = anchorNodeParent.innerHTML
+        // Needed to get the proper offset value. 
+        var child = anchorNode.previousSibling
+        var lengthBeforeSelection = 0
+        while(anchorNode.firstChild != child && !js.isUndefined(child)){
+            if(child.toString() == "[object Text]"){
+                lengthBeforeSelection += child.asInstanceOf[dom.Text].length
+            }else{
+                lengthBeforeSelection += child.asInstanceOf[dom.Element].outerHTML.length()
+            } 
+            child = child.previousSibling
+        }
+        // Splitting the HTML and inserting the tag.
+        val fstSpit = if(selectingUp) selection.anchorOffset+lengthBeforeSelection else
+            selection.anchorOffset+lengthBeforeSelection-state.currentSelection.length()
+        val (fst, snd) = text.splitAt(fstSpit)
+        val (trd, fth) = snd.splitAt(state.currentSelection.length())
+        anchorNodeParent.innerHTML = fst+"<b>"+trd+"</b>"+fth
+    }
     def hideMenu(): Unit = {
         document.body.removeChild(menuDiv)
         isVisible = false
@@ -30,17 +55,31 @@ class TagMenu(gState: GlobalState) {
     def updateMenuLoc(): Unit = {
         // Determines if the user is selecting up or down and returns a y-coordinate accordingly.
         val yPos = if (state.mouse_loc._2+dom.window.pageYOffset > state.pointer_down_loc._2){
-            (state.mouse_loc._2+dom.window.pageYOffset+menuContextMargin)
-        }else (state.mouse_loc._2+dom.window.pageYOffset-(80+menuContextMargin))
+            selectingUp = true
+            state.mouse_loc._2+dom.window.pageYOffset+menuContextMargin
+        }else{
+            selectingUp = false
+            state.mouse_loc._2+dom.window.pageYOffset-(80+menuContextMargin)
+        }
 
-        menuDiv.setAttribute("style", "position: absolute; left: "+(dom.window.innerWidth/2 - 100)+"px;top:"+
-            yPos+"px;");
+        menuDiv.setAttribute("style", "position: absolute; left: "+(dom.window.innerWidth/2 - 100)+
+            "px;top:"+yPos+"px;");
+    }
+    def pushBack(): Unit = {
+        menuDiv.classList.add("menuBelow")
+        menuDiv.classList.remove("menuAbove")
+    }
+    def bringForward(): Unit = {
+        menuDiv.classList.add("menuAbove")
+        menuDiv.classList.remove("menuBelow")
     }
     def addTag(name: String, color: String): Unit = {
         val tagDiv = document.createElement("div")
         
         val checkBox = document.createElement("input")
         checkBox.setAttribute("type", "checkbox")
+        checkBox.addEventListener("click", tagApply)
+
         val checkBoxDiv = document.createElement("div")
         checkBoxDiv.setAttribute("class", "tagCheckBox")
         checkBoxDiv.setAttribute("style", "background-color:"+color)
@@ -55,13 +94,5 @@ class TagMenu(gState: GlobalState) {
         menuDiv.appendChild(tagDiv)
         tags :+ (name,color,tagDiv)
         updateSize()
-        // <div>
-        //     <div style="background-color:blue; padding:5px;">
-        //         <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-        //     </div>
-        //     <div style="line-height:30px; margin-left:5px;">
-        //         Name
-        //     </div>
-        // </div>
     }
 }

@@ -19,3 +19,10 @@
     line-height:30px; 
     margin-left:5px;
 }
+.menuAbove{
+    z-index: 1;
+}
+.menuBelow{
+    z-index: -1;
+    opacity: 0.3;
+}

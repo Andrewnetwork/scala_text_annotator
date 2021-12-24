@@ -7,23 +7,29 @@ object Main {
     var state = new GlobalState()
     var selectionMenu = new TagMenu(state)
     selectionMenu.addTag("Name", "#348ceb")
+    selectionMenu.addTag("Place", "#f5f542")
+    selectionMenu.addTag("Clothing", "#f54245")
 
-    val pollingFn = (state: GlobalState) => {
+    // If the user has selected new text, return the updated selection. Otherwise, return nothing. 
+    val pollingFn: GlobalState => Option[String] = (state: GlobalState) => {
         val updatedSelection = dom.window.getSelection().toString()
         if (updatedSelection != state.currentSelection){
             state.currentSelection = dom.window.getSelection().toString()
             Some(updatedSelection)
         } else None
     }
-    val eventListener = (selection: String) => {
+    // This function is called when pollingFn returns something. 
+    val eventListener: String => Unit = (selection: String) => {
         if(selection.length()>0 && !selectionMenu.isVisible){
             selectionMenu.displayMenu()
+            selectionMenu.pushBack()
         } 
         if(selection.length()==0 && selectionMenu.isVisible){
             selectionMenu.hideMenu()
         }
         selectionMenu.updateMenuLoc()
     }
+    // Call pollingFn on an interval. 
     val pollingEvent = new PollingEvent(state, pollingFn, eventListener)
 
     document.addEventListener("mousemove", {(e: dom.MouseEvent) =>
@@ -31,6 +37,9 @@ object Main {
     })
     document.addEventListener("pointerdown", {(e: dom.MouseEvent) =>
         state.pointer_down_loc = (e.pageX, e.pageY)
+    })
+    document.addEventListener("pointerup", {(e: dom.MouseEvent) =>
+        selectionMenu.bringForward()
     })
 
     def main(args: Array[String]): Unit = {}
