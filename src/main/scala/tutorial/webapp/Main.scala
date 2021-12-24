@@ -6,9 +6,9 @@ import scala.scalajs.js.timers.setInterval
 object Main {
     var state = new GlobalState()
     var selectionMenu = new TagMenu(state)
-    selectionMenu.addTag("Name", "#348ceb")
-    selectionMenu.addTag("Place", "#f5f542")
-    selectionMenu.addTag("Clothing", "#f54245")
+    selectionMenu.addTag("Name", "rgba(255,0,4,0.3)")
+    selectionMenu.addTag("Place", "rgba(0,21,255,0.3)")
+    selectionMenu.addTag("Clothing", "rgba(255,247,0,0.3)")
 
     // If the user has selected new text, return the updated selection. Otherwise, return nothing. 
     val pollingFn: GlobalState => Option[String] = (state: GlobalState) => {
