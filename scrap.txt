@@ -1,0 +1,34 @@
+  // var innerHTMLBefore = ""
+
+            // var currentNode = anchorNode
+            // while(currentNode != focusNode){
+                
+            //     innerHTMLBefore += extractNodeHTML(currentNode)
+            //     console.log(innerHTMLBefore)
+            //     currentNode = if(currentNode.nextSibling == null){
+            //         // We have reached a leaf on the dom tree. 
+            //         // We must go up and then down into the next branch.
+            //         //currentNode.parentNode.asInstanceOf[dom.Element].innerHTML = currentNode.parentNode.asInstanceOf[dom.Element].innerHTML + "Hello"
+                    
+            //         currentNode.parentNode.asInstanceOf[dom.Element].nextElementSibling.firstChild
+            //     }else currentNode.nextSibling
+            // }
+            // console.log(extractNodeHTML(focusNode).splitAt(selection.focusOffset))
+            // Needed to get the proper offset value. 
+            // var child = anchorNode.previousSibling
+            // var lengthBeforeSelection = 0
+            // dom.console.log(selection.asInstanceOf[dom.Element].outerHTML.length())
+            // while(anchorNode.firstChild != child && !js.isUndefined(child)){
+            //     if(child.toString() == "[object Text]"){
+            //         lengthBeforeSelection += child.asInstanceOf[dom.Text].length
+            //     }else{
+            //         lengthBeforeSelection += child.asInstanceOf[dom.Element].outerHTML.length()
+            //     } 
+            //     child = child.previousSibling
+            // }
+            // // Splitting the HTML and inserting the tag.
+            // val fstSpit = if(selection.anchorOffset <= selection.focusOffset) selection.anchorOffset+lengthBeforeSelection else 
+            //         selection.anchorOffset+lengthBeforeSelection-state.currentSelection.length()
+            // val (fst, snd) = text.splitAt(fstSpit)
+            // val (trd, fth) = snd.splitAt(state.currentSelection.length())
+            // anchorNodeParent.innerHTML = fst+"<span style='background-color:"+color+"'>"+trd+"</span>"+fth

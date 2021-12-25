@@ -7,6 +7,7 @@ import dom.window.console
 class TagMenu(gState: GlobalState) {
     val state = gState
     val menuDiv = document.createElement("div")
+    val commentInput = document.createElement("textarea")
     var isVisible = false
     val menuContextMargin = 40
     var menuHeight = 0.0
@@ -15,33 +16,57 @@ class TagMenu(gState: GlobalState) {
 
     val loc: (Double, Double) = if (state.mouse_loc._2 > state.pointer_down_loc._2) state.mouse_loc else state.pointer_down_loc
     menuDiv.setAttribute("id", "menu")
-    menuDiv.setAttribute("style", "position: absolute; left: "+(dom.window.innerWidth/2 - 100)+
+    menuDiv.setAttribute("style", "position: absolute; left: "+(dom.window.innerWidth/2 - menuDiv.clientWidth/2)+
         "px;top:"+(loc._2+40)+"px;")
+    val commentDiv = document.createElement("div")
+    commentDiv.setAttribute("id","commentDiv")
+    commentInput.setAttribute("id","commentInput")
+    commentDiv.appendChild(commentInput)
+    menuDiv.appendChild(commentDiv)
     updateSize()
 
     private def extractNodeValue(node: dom.Node): String = {
         if(node.toString() == "[object Text]") node.asInstanceOf[dom.Text].data else
             node.asInstanceOf[dom.Element].outerHTML
     }
+    private def prependNode(node: dom.Node, data: String): Unit = {
+        if(node.toString() == "[object Text]") node.asInstanceOf[dom.Text].data = data + 
+            node.asInstanceOf[dom.Text].data else
+                node.asInstanceOf[dom.Element].outerHTML = data +
+                    node.asInstanceOf[dom.Element].outerHTML 
+    }
+    private def appendNode(node: dom.Node, data: String): Unit = {
+        if(node.toString() == "[object Text]") node.asInstanceOf[dom.Text].data += data
+             else node.asInstanceOf[dom.Element].outerHTML += data
+    }
+    private def getParentParagraphNode(node: dom.Node): dom.Element = {
+        if(node.parentNode.nodeType == dom.Node.ELEMENT_NODE){
+            if(node.parentNode.asInstanceOf[dom.Element].tagName == "PARAGRAPH"){
+                node.parentNode.asInstanceOf[dom.Element]
+            }else getParentParagraphNode(node.parentNode)
+        }else getParentParagraphNode(node.parentNode)
+    }
     def makeTagCallback(color: String): Function1[dom.Event, Unit] = {
         val tagBegin = "<span style='background-color:"+color+"'>"
-        val tagEnd = "</span>"
+        val tagEnd   = "</span>"
         (e0: dom.Event) => {
             val selection = dom.window.getSelection()
             val anchorNode = selection.anchorNode
             val focusNode = selection.focusNode
             val focusOffset = selection.focusOffset
             val anchorOffset = selection.anchorOffset
-            val anchorNodeParent = anchorNode.parentNode.asInstanceOf[dom.Element]
-            val text = anchorNodeParent.innerHTML
-            
+            val anchorNodeParent = getParentParagraphNode(anchorNode)
+        
             var currentNode = anchorNodeParent.firstChild
             var newHTML = ""
             var beginningTagPlaced = false
             var endTagPlaced = false
             var changeList = List[(dom.Element, String)]()
             var afterFirst = false
-            while(currentNode != null){
+        
+            console.log(anchorNode)
+            while(currentNode != null){ 
+                console.log(currentNode)
                 if(afterFirst){
                     newHTML += tagBegin
                 }
@@ -78,8 +103,15 @@ class TagMenu(gState: GlobalState) {
                             endTagPlaced = true
                         }
                     }
+                }else if(currentNode.contains(anchorNode) && !currentNode.contains(focusNode)){
+                    //TODO: generalize for deeply nested anchor nodes.
+                    val (before, mark) = extractNodeValue(currentNode.firstChild).splitAt(anchorOffset)
+                    val outerOpen = currentNode.asInstanceOf[dom.Element].outerHTML.split(">")(0)+">"
+                    val outerClose = "<"+currentNode.asInstanceOf[dom.Element].outerHTML.split("<").last
+                    newHTML += outerOpen+before+tagBegin+mark+tagEnd+outerClose
+                    newHTML += tagBegin
+                    beginningTagPlaced = true
                 }else if(currentNode == focusNode){
-                    
                     if(beginningTagPlaced){
                         val (inMark, after) = extractNodeValue(currentNode).splitAt(focusOffset)
                         newHTML += inMark+tagEnd+after 
@@ -97,6 +129,8 @@ class TagMenu(gState: GlobalState) {
                     changeList = (currentNode.parentNode.asInstanceOf[dom.Element], 
                         (newHTML + (if (!endTagPlaced) tagEnd else ""))) :: changeList
                     if(!endTagPlaced || !beginningTagPlaced){
+                        //console.log("HERE")
+                        //console.log(currentNode.toString())
                         val nextNode = currentNode.parentNode.asInstanceOf[dom.Element].nextElementSibling.firstChild
                         currentNode = nextNode
                         afterFirst = true
@@ -110,44 +144,8 @@ class TagMenu(gState: GlobalState) {
             dom.window.getSelection().removeAllRanges()
             for((node: dom.Element, string: String) <- changeList){
                 node.innerHTML = string
-                console.log(string)
             }
-            
     }}
-    // var innerHTMLBefore = ""
-
-            // var currentNode = anchorNode
-            // while(currentNode != focusNode){
-                
-            //     innerHTMLBefore += extractNodeHTML(currentNode)
-            //     console.log(innerHTMLBefore)
-            //     currentNode = if(currentNode.nextSibling == null){
-            //         // We have reached a leaf on the dom tree. 
-            //         // We must go up and then down into the next branch.
-            //         //currentNode.parentNode.asInstanceOf[dom.Element].innerHTML = currentNode.parentNode.asInstanceOf[dom.Element].innerHTML + "Hello"
-                    
-            //         currentNode.parentNode.asInstanceOf[dom.Element].nextElementSibling.firstChild
-            //     }else currentNode.nextSibling
-            // }
-            // console.log(extractNodeHTML(focusNode).splitAt(selection.focusOffset))
-            // Needed to get the proper offset value. 
-            // var child = anchorNode.previousSibling
-            // var lengthBeforeSelection = 0
-            // dom.console.log(selection.asInstanceOf[dom.Element].outerHTML.length())
-            // while(anchorNode.firstChild != child && !js.isUndefined(child)){
-            //     if(child.toString() == "[object Text]"){
-            //         lengthBeforeSelection += child.asInstanceOf[dom.Text].length
-            //     }else{
-            //         lengthBeforeSelection += child.asInstanceOf[dom.Element].outerHTML.length()
-            //     } 
-            //     child = child.previousSibling
-            // }
-            // // Splitting the HTML and inserting the tag.
-            // val fstSpit = if(selection.anchorOffset <= selection.focusOffset) selection.anchorOffset+lengthBeforeSelection else 
-            //         selection.anchorOffset+lengthBeforeSelection-state.currentSelection.length()
-            // val (fst, snd) = text.splitAt(fstSpit)
-            // val (trd, fth) = snd.splitAt(state.currentSelection.length())
-            // anchorNodeParent.innerHTML = fst+"<span style='background-color:"+color+"'>"+trd+"</span>"+fth
     def hideMenu(): Unit = {
         document.body.removeChild(menuDiv)
         isVisible = false
@@ -173,7 +171,7 @@ class TagMenu(gState: GlobalState) {
             state.mouse_loc._2+dom.window.pageYOffset-(80+menuContextMargin)
         }
 
-        menuDiv.setAttribute("style", "position: absolute; left: "+(dom.window.innerWidth/2 - 100)+
+        menuDiv.setAttribute("style", "position: absolute; left: "+(dom.window.innerWidth/2 - menuDiv.clientWidth/2)+
             "px;top:"+yPos+"px;");
     }
     def pushBack(): Unit = {

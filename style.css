@@ -10,6 +10,15 @@
     border: thin solid black;
     box-shadow: 1px 4px 5px 3px #888888;
 }
+#commentDiv{
+    width: 100%;
+    height: 100px;
+    user-select: none;
+}
+#commentInput{
+    width: 100%;
+    user-select: none;
+}
 #menu > div{
     display: flex;
     margin:5px;
@@ -27,4 +36,12 @@
 .menuBelow{
     z-index: -1;
     opacity: 0.3;
+}
+paragraph{
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 20px;
 }
